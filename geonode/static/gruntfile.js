@@ -26,8 +26,7 @@ module.exports = function(grunt) {
         files: [
           {
             // includes bootstrap.css
-            'geonode/css/base.css': 'geonode/less/base.less',
-            'geonode/css/activity.css': 'geonode/less/activity.less'
+            'geonode/css/base.css': 'geonode/less/base.less'
           }
         ]
       },
@@ -39,8 +38,7 @@ module.exports = function(grunt) {
         files: [
           {
             // includes bootstrap.css
-            'geonode/css/base.css': 'geonode/less/base.less',
-            'geonode/css/activity.css': 'geonode/less/activity.less'
+            'geonode/css/base.css': 'geonode/less/base.less'
           }
         ]
       }
@@ -80,7 +78,8 @@ module.exports = function(grunt) {
             'select2/select2.css', 
             'multi-select/css/multi-select.css',
             'jquery-ui/themes/smoothness/jquery-ui.css',
-            'bootstrap/dist/css/bootstrap.min.css'
+            'bootstrap/dist/css/bootstrap.min.css',
+            'bootstrap-datepicker/css/datepicker.css'
           ]
         }, {
           expand: true,
@@ -94,6 +93,7 @@ module.exports = function(grunt) {
             'multi-select/img/switch.png',
             'datatables/media/images/*.png',
             'jquery-ui/themes/smoothness/images/animated-overlay.gif',
+            'zeroclipboard/dist/ZeroClipboard.swf'
           ]
         }, {
           expand: true,
@@ -120,7 +120,9 @@ module.exports = function(grunt) {
             'qunit/qunit/qunit.js',
             'angular/angular.js',
             'angular-leaflet-directive/dist/angular-leaflet-directive.min.js',
-            'bootstrap/dist/js/bootstrap.min.js'
+            'bootstrap/dist/js/bootstrap.min.js',
+            'zeroclipboard/dist/ZeroClipboard.min.js',
+            'moment/min/moment.min.js'
           ]
         }]
       }
@@ -174,7 +176,8 @@ module.exports = function(grunt) {
             'lib/css/select2.css',
             'lib/css/multi-select.css',
             'lib/css/jquery-ui.css',
-            'lib/css/bootstrap.min.css'
+            'lib/css/bootstrap.min.css',
+            'lib/css/datepicker.css'
           ]
         }
       }
@@ -203,7 +206,10 @@ module.exports = function(grunt) {
             'lib/js/select2.js',
             'lib/js/bootstrap.min.js',
             'lib/js/angular.js',
-            'lib/js/angular-leaflet-directive.min.js'
+            'lib/js/angular-leaflet-directive.min.js',
+            'lib/js/moment.min.js',
+            'lib/js/ZeroClipboard.min.js'
+
           ],
           'lib/js/require.js': ['lib/js/require.js'],
           'lib/js/text.js': ['lib/js/text.js'],
