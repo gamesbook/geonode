@@ -51,6 +51,10 @@ from geonode.people.forms import ProfileForm, PocForm
 from geonode.security.views import _perms_info_json
 from geonode.documents.models import get_related_documents
 
+# imports for sSOS
+if 'geonode.geoserver' in settings.INSTALLED_APPS:
+    from geonode.geoserver.helpers import ogc_server_settings
+    from geonode.geoserver.ows import sos_swe_data_list, sos_observation_xml
 
 logger = logging.getLogger("geonode.layers.views")
 
@@ -376,3 +380,69 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
                 mimetype="text/plain",
                 status=401
         )
+
+
+def get_metadata(request, layername):
+    """Return metadata for a layer specified by name.
+    
+    Access to the layer keywords is needed to determine the additional 
+    characteristics of a layer. 
+
+    Access to the layer's supplemental information at this level must be 
+    parsed for appropriate function.
+    """
+    layer = _resolve_layer(request, layername, 'layers.view_layer', _PERMISSION_MSG_VIEW)
+    if 'feature' in request.GET:
+        feature = request.GET['feature']
+    else:
+        feature = None
+    keys = [lkw.name for lkw in layer.keywords.all()]
+    sup_inf_str = str(layer.supplemental_information) 
+    if "sos" in keys or "SOS" in keys:
+        return layer_sos_csv(feature, sup_inf_str, time=None)
+    #elif "netcdf" in keys or "NetCDF" in keys:
+        #return netcdf_layer_csv(request, layername, time=None)
+    else:
+        return None
+
+
+def layer_sos_csv(feature, supplementary_info, time=None):
+    """Return SOS data in CSV format for a layer that specifies a valid SOS URL.
+    
+    Parameters
+    ----------
+    feature : string
+        the ID of a feature from the WFS; this is used as a link to a
+        corresponding "feature_of_interest" in the SOS
+    supplementary_info : dictionary
+        a set of parameters used to access a SOS.  For example:
+            {"sos_url": "http://sos.server.com:8080/sos", 
+             "observedProperties": ["urn:ogc:def:phenomenon:OGC:1.0.30:temperature"], 
+             "offerings": ["WEATHER"]}
+    time : string
+        Optional.   Time should conform to ISO format: YYYY-MM-DDTHH:mm:ss+-HH
+        Instance is given as one time value. Periods of time (start and end) are
+        separated by "/". Example: 2009-06-26T10:00:00+01/2009-06-26T11:00:00+01
+    """
+    import csv
+    sup_info = eval(supplementary_info)
+    offerings = sup_info.get('offerings')
+    url = sup_info.get('sos_url')
+    observedProperties = sup_info.get('observedProperties')
+    time = time
+    XML = sos_observation_xml(
+        url, offerings=offerings, observedProperties=observedProperties, 
+        allProperties=False, feature=feature, eventTime=time)
+    lists = sos_swe_data_list(XML)
+    sos_data = HttpResponse(mimetype='text/csv')
+    sos_data['Content-Disposition'] = 'attachment;filename=sos.csv'
+    writer = csv.writer(sos_data)
+    # headers are included by default in lists, can set show_headers to false
+    #   in the sos_swe_data_list() in ows.py
+    writer.writerows(lists)
+    return sos_data
+    # TODO set the response to return JSON including format, data and style info
+    # service_result =  { format: ...,
+    #                    'data': sos_data,
+    #                     style: ...}
+    # return HttpResponse(json.dumps(service_result), mimetype="application/json")

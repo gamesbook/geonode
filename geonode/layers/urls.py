@@ -39,6 +39,9 @@ urlpatterns = patterns(
     #url(r'^api/batch_permissions/?$', 'batch_permissions',
     #    name='batch_permssions'),
     #url(r'^api/batch_delete/?$', 'batch_delete', name='batch_delete'),
+    # SOS layers
+    url(r'^(?P<layername>[^/]*)/sos/csv$', 'layer_sos_csv', name='layer_sos_csv'),
+    url(r'^(?P<layername>[^/]*)/additional_metadata$', 'get_metadata', name='get_metadata')
 )
 
 # -- Deprecated url routes for Geoserver authentication -- remove after GeoNode 2.1
@@ -49,8 +52,3 @@ if 'geonode.geoserver' in settings.INSTALLED_APPS:
         url(r'^resolve_user/?$', 'resolve_user', name='layer_resolve_user_dep'),
         url(r'^download$', 'layer_batch_download', name='layer_batch_download_dep'),
     ) + urlpatterns
-
-
-
-
-
