@@ -42,8 +42,8 @@ urlpatterns = patterns(
     #    name='batch_permssions'),
     #url(r'^api/batch_delete/?$', 'batch_delete', name='batch_delete'),
     # SOS layers
-    url(r'^(?P<layername>[^/]*)/sos/csv$', 'layer_sos_csv', name='layer_sos_csv'),
-    url(r'^(?P<layername>[^/]*)/additional_metadata$', 'get_metadata', name='get_metadata')
+    #url(r'^(?P<layername>[^/]*)/sos/csv$', 'layer_sos_csv', name='layer_sos_csv'),
+    url(r'^(?P<layername>[^/]*)/data$', 'layer_data', name='layer_data')
 )
 
 # -- Deprecated url routes for Geoserver authentication -- remove after GeoNode 2.1

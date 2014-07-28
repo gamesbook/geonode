@@ -464,9 +464,10 @@ def layer_remove(request, layername, template='layers/layer_remove.html'):
             status=401
         )
 
-#### Optional Layer Views ####
+# Optional Layer Views #
 
 
+@login_required
 def layer_data(request, layername, mimetype="text/csv"):
     """Return non-spatial data for a named layer, in required mimetype format.
 
@@ -474,11 +475,11 @@ def layer_data(request, layername, mimetype="text/csv"):
     characteristics defined for a layer.
 
     Access to the layer's supplemental information at this level must be
-    parsed to route the request to the correct function.
+    parsed to route the request to the correct data extraction function.
     """
     layer = _resolve_layer(
         request, layername, 'layers.view_layer', _PERMISSION_MSG_VIEW)
-    if 'feature' in request.GET:
+    if request.method == 'GET' and 'feature' in request.GET:
         feature = request.GET['feature']
     else:
         feature = None
@@ -489,5 +490,6 @@ def layer_data(request, layername, mimetype="text/csv"):
     elif "NetCDF" in keys:
         return layer_netcdf(request, layername, time=None, mimetype=mimetype)
     else:
-        pass
-    return None
+        content = "Unsupported data type in layer keys..."
+        status = 501
+        return HttpResponse(content=content, status=status)
