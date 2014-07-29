@@ -56,9 +56,9 @@ def layer_sos(feature, supplementary_info, time=None, mimetype="text/csv"):
 
     Returns
     ------
-    mimetype data, or None if an error is encountered.
+    HttpResponse with mimetype data, or None if an error is encountered.
     """
-    sos_data = None
+    sos_data = HttpResponse(content="Unable to process request", status=500)
     try:
         sup_info = eval(supplementary_info)
         offerings = sup_info.get('offerings')
@@ -104,6 +104,11 @@ def layer_netcdf(request, supplementary_info, time=None, mimetype="text/csv"):
         Optional.   Time should conform to ISO format: YYYY-MM-DDTHH:mm:ss+-HH
         Instance is given as one time value. Periods of time (start and end) are
         separated by "/". Example: 2009-06-26T10:00:00+01/2009-06-26T11:00:00+01
+
+    Returns
+    ------
+    HttpResponse with mimetype data, or None if an error is encountered.
     """
     #TODO
-    return None
+    netcdf_data = HttpResponse(content="Unable to process request", status=500)
+    return netcdf_data
