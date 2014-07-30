@@ -23,7 +23,7 @@ from django.utils.translation import ugettext_lazy as _
 from owslib.wcs import WebCoverageService
 from owslib.coverage.wcsBase import ServiceException
 import urllib
-#from geonode import GeoNodeException
+from geonode import GeoNodeException
 from re import sub
 
 # SOS-related imports
@@ -56,7 +56,7 @@ def wcs_links(
         err_msg = 'WCS server returned exception: %s' % err
         if not quiet:
             logger.warn(err_msg)
-        #raise GeoNodeException(err_msg)
+        raise GeoNodeException(err_msg)
 
     msg = ('Could not create WCS links for layer "%s",'
            ' it was not in the WCS catalog,'
