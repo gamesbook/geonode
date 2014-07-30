@@ -114,6 +114,14 @@ form#search {
 .user-avatar {
   margin-top: 10px;
 }
+
+.avatar {
+  img {
+   border-radius: 3px;
+   margin-right: 3px;
+  }
+}
+
 .dropdown-menu form {
   padding: 10px;
 }
@@ -215,8 +223,13 @@ nav.filter {
     font-weight: 300;
     padding: 10px 0;
     text-transform: uppercase;
+    border-radius: 3px;
+
     a {
       color: white;
+    }
+    a.toggle{
+      text-decoration: none;
     }
     i {
       margin-left: 8px;
@@ -348,8 +361,7 @@ footer {
   -moz-border-radius: 0px;
 }
 
-
-input.datepicker {
+.filter input.datepicker {
   width: 100%;
 }
 /* Activity
@@ -446,4 +458,8 @@ input.datepicker {
 }
 .activity-timestamp {
   margin-top: -10px;
+}
+
+#permission_form .select2-container {
+  width: 250px;
 }
