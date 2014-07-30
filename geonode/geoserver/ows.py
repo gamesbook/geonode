@@ -23,13 +23,14 @@ from django.utils.translation import ugettext_lazy as _
 from owslib.wcs import WebCoverageService
 from owslib.coverage.wcsBase import ServiceException
 import urllib
-from geonode import GeoNodeException
+#from geonode import GeoNodeException
 from re import sub
 
 # SOS-related imports
 from owslib.sos import SensorObservationService
 from owslib.util import nspath_eval
 from owslib.swe.observation.sos100 import namespaces
+from owslib.namespaces import Namespaces
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def wcs_links(
         err_msg = 'WCS server returned exception: %s' % err
         if not quiet:
             logger.warn(err_msg)
-        raise GeoNodeException(err_msg)
+        #raise GeoNodeException(err_msg)
 
     msg = ('Could not create WCS links for layer "%s",'
            ' it was not in the WCS catalog,'
@@ -157,9 +158,14 @@ def sos_swe_data_list(response, constants=[], show_headers=True):
     show_headers : boolean
         if True, inserts list of headers as first nested list
     """
+    from lxml import etree
     result = []
     headers = []
     _tree = etree.fromstring(response)
+    # TEMPORARY PATCH; waiting for https://github.com/geopython/OWSLib/pull/170
+    if 'om' not in namespaces.keys():
+        ns = Namespaces()
+        namespaces['om'] = ns.get_namespace('om')
     data = _tree.findall(
         nspath_eval('om:member/om:Observation/om:result/swe:DataArray',
         namespaces))
